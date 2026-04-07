@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent 机制学习路线图</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #1a1a2e; color: #eee; padding: 40px; }
+        h1 { text-align: center; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
+        .progress-bar { background: #2d2d44; height: 8px; border-radius: 4px; margin-bottom: 40px; }
+        .progress-fill { background: linear-gradient(90deg, #4ade80, #22c55e); height: 100%; border-radius: 4px; width: 20%; transition: width 0.3s; }
+        .concepts { display: flex; flex-direction: column; gap: 12px; max-width: 800px; margin: 0 auto; }
+        .concept { display: flex; align-items: center; gap: 16px; padding: 16px 20px; background: #252542; border-radius: 12px; border: 2px solid transparent; }
+        .concept.mastered { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
+        .concept.in-progress { border-color: #3b82f6; background: rgba(59, 130, 246, 0.1); animation: pulse 2s infinite; }
+        .concept.not-started { opacity: 0.5; }
+        @keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); } 50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); } }
+        .status { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .status.mastered { background: #22c55e; }
+        .status.in-progress { background: #3b82f6; }
+        .status.not-started { background: #4b5563; }
+        .concept-info { flex: 1; }
+        .concept-name { font-weight: 600; margin-bottom: 4px; }
+        .concept-desc { font-size: 13px; color: #888; }
+        .score { font-size: 14px; color: #4ade80; font-weight: 600; }
+        .footer { text-align: center; margin-top: 40px; color: #666; font-size: 13px; }
+    </style>
+</head>
+<body>
+    <h1>Agent 运行机制学习路线</h1>
+    <p class="subtitle">Claude Code 底层原理拆解</p>
+
+    <div class="progress-bar"><div class="progress-fill"></div></div>
+
+    <div class="concepts">
+        <div class="concept mastered">
+            <div class="status mastered">✓</div>
+            <div class="concept-info">
+                <div class="concept-name">1. Tool 定义（TOOLS 变量）</div>
+                <div class="concept-desc">告诉 LLM 有哪些工具可用</div>
+            </div>
+            <div class="score">90%</div>
+        </div>
+        <div class="concept mastered">
+            <div class="status mastered">✓</div>
+            <div class="concept-info">
+                <div class="concept-name">2. System Prompt 的作用</div>
+                <div class="concept-desc">定义 Agent 身份、上下文和行为规范</div>
+            </div>
+            <div class="score">85%</div>
+        </div>
+        <div class="concept in-progress">
+            <div class="status in-progress">→</div>
+            <div class="concept-info">
+                <div class="concept-name">3. Agent Loop 循环机制</div>
+                <div class="concept-desc">while True 循环，持续调用 LLM 直到任务完成</div>
+            </div>
+            <div class="score">40%</div>
+        </div>
+        <div class="concept not-started">
+            <div class="status not-started">○</div>
+            <div class="concept-info">
+                <div class="concept-name">4. tool_result 反馈机制</div>
+                <div class="concept-desc">工具执行结果如何反馈给 LLM</div>
+            </div>
+        </div>
+        <div class="concept not-started">
+            <div class="status not-started">○</div>
+            <div class="concept-info">
+                <div class="concept-name">5. stop_reason 条件判断</div>
+                <div class="concept-desc">LLM 如何决定"我做完了"</div>
+            </div>
+        </div>
+        <div class="concept not-started">
+            <div class="status not-started">○</div>
+            <div class="concept-info">
+                <div class="concept-name">6. messages 历史累积</div>
+                <div class="concept-desc">对话历史如何影响 Agent 行为</div>
+            </div>
+        </div>
+        <div class="concept not-started">
+            <div class="status not-started">○</div>
+            <div class="concept-info">
+                <div class="concept-name">7-10. 进阶：多工具、TodoWrite、Subagent...</div>
+                <div class="concept-desc">s02-s_full 的更多特性</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        进度: 2/10 概念 | 上次学习: 2026-04-07 19:00
+    </div>
+</body>
+</html>
