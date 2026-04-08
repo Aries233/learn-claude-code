@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>学习总结 - Claude Code Agent 运行机制</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      color: #e0e0e0;
+      padding: 40px 20px;
+    }
+    .container { max-width: 800px; margin: 0 auto; }
+    h1 {
+      font-size: 2rem;
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+    }
+    .date { color: #888; margin-bottom: 30px; }
+    h2 {
+      font-size: 1.3rem;
+      color: #00d9ff;
+      margin: 30px 0 15px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #333;
+    }
+    .progress-bar {
+      background: #333;
+      border-radius: 10px;
+      height: 24px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .progress-fill {
+      background: linear-gradient(90deg, #00d9ff, #00ff88);
+      height: 100%;
+      width: 80%;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 10px;
+      font-size: 12px;
+      font-weight: bold;
+      color: #1a1a2e;
+    }
+    .concept-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .concept-card {
+      background: #252540;
+      border-radius: 12px;
+      padding: 15px;
+      border-left: 4px solid #00ff88;
+    }
+    .concept-card.pending {
+      border-left-color: #666;
+      opacity: 0.6;
+    }
+    .concept-card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+    .concept-card .score {
+      font-size: 0.8rem;
+      color: #00ff88;
+    }
+    .insight-list {
+      list-style: none;
+    }
+    .insight-list li {
+      background: #252540;
+      padding: 15px 20px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      position: relative;
+      padding-left: 45px;
+    }
+    .insight-list li::before {
+      content: "💡";
+      position: absolute;
+      left: 15px;
+    }
+    .code-block {
+      background: #1a1a2e;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 15px;
+      font-family: "Fira Code", monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+      margin: 15px 0;
+    }
+    .keyword { color: #ff79c6; }
+    .string { color: #f1fa8c; }
+    .comment { color: #6272a4; }
+    .next-steps {
+      background: linear-gradient(135deg, #252540, #1a1a2e);
+      border: 1px solid #00d9ff;
+      border-radius: 12px;
+      padding: 20px;
+      margin-top: 30px;
+    }
+    .next-steps h3 {
+      color: #00d9ff;
+      margin-bottom: 10px;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 40px;
+      color: #666;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Claude Code Agent 运行机制</h1>
+    <p class="date">学习日期: 2026-04-07</p>
+
+    <h2>📈 学习进度</h2>
+    <div class="progress-bar">
+      <div class="progress-fill">8/10 概念掌握 (80%)</div>
+    </div>
+
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h3>Tool 定义</h3>
+        <div class="score">90%</div>
+      </div>
+      <div class="concept-card">
+        <h3>System Prompt</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>Agent Loop 循环</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>tool_result 反馈</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>多工具系统</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>TodoWrite 任务管理</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card pending">
+        <h3>Subagent 子代理</h3>
+        <div class="score">待学习</div>
+      </div>
+      <div class="concept-card pending">
+        <h3>完整实现</h3>
+        <div class="score">待学习</div>
+      </div>
+    </div>
+
+    <h2>💡 核心洞察</h2>
+    <ul class="insight-list">
+      <li><strong>循环是 Agent 的心脏</strong>：while True + stop_reason 判断，让 LLM 能多轮调用工具直到任务完成</li>
+      <li><strong>消息累积是记忆</strong>：assistant 追加 tool_use，user 追加 tool_result，模型通过 messages 历史"记住"之前发生的事</li>
+      <li><strong>契约驱动设计</strong>：TOOLS 定义是给 LLM 看的"契约"，模型按契约返回参数，代码只需信任并传递</li>
+      <li><strong>软性约束更灵活</strong>：nag reminder 每 3 轮提醒一次，比"每轮必须更新"更节省模型注意力</li>
+      <li><strong>注入是引导行为的关键</strong>：系统可以在 tool_result 中混入 text 消息，主动引导模型行为</li>
+    </ul>
+
+    <h2>🔧 核心代码模式</h2>
+    <div class="code-block">
+<span class="keyword">while</span> True:
+    response = LLM(messages, tools)
+    messages.append({<span class="string">"role"</span>: <span class="string">"assistant"</span>, <span class="string">"content"</span>: response.content})
+
+    <span class="keyword">if</span> response.stop_reason != <span class="string">"tool_use"</span>:
+        <span class="keyword">return</span>  <span class="comment"># 任务完成，退出循环</span>
+
+    results = []
+    <span class="keyword">for</span> block <span class="keyword">in</span> response.content:
+        <span class="keyword">if</span> block.type == <span class="string">"tool_use"</span>:
+            handler = TOOL_HANDLERS.get(block.name)
+            output = handler(**block.input)  <span class="comment"># 契约驱动</span>
+            results.append({<span class="string">"type"</span>: <span class="string">"tool_result"</span>, ...})
+
+    messages.append({<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: results})
+    </div>
+
+    <div class="next-steps">
+      <h3>🚀 下一步学习</h3>
+      <p><strong>s04: Subagent 子代理</strong> - 让 Agent 能"派活"给子 Agent，实现更复杂任务的并行处理</p>
+      <p style="margin-top: 10px; color: #888;">恢复学习时运行: <code>/sigma --resume</code></p>
+    </div>
+
+    <div class="footer">
+      Sigma Tutor · Bloom's 2-Sigma Mastery Learning
+    </div>
+  </div>
+</body>
+</html>
