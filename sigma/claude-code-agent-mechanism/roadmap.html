@@ -10,7 +10,7 @@
         h1 { text-align: center; margin-bottom: 10px; }
         .subtitle { text-align: center; color: #888; margin-bottom: 40px; }
         .progress-bar { background: #2d2d44; height: 8px; border-radius: 4px; margin-bottom: 40px; max-width: 800px; margin-left: auto; margin-right: auto; }
-        .progress-fill { background: linear-gradient(90deg, #4ade80, #22c55e); height: 100%; border-radius: 4px; width: 76%; transition: width 0.3s; }
+        .progress-fill { background: linear-gradient(90deg, #4ade80, #22c55e); height: 100%; border-radius: 4px; width: 89%; transition: width 0.3s; }
         .concepts { display: flex; flex-direction: column; gap: 10px; max-width: 800px; margin: 0 auto; }
         .concept { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #252542; border-radius: 10px; border: 2px solid transparent; }
         .concept.mastered { border-color: #22c55e; background: rgba(34, 197, 94, 0.1); }
@@ -66,7 +66,7 @@
             <div class="status mastered">✓</div>
             <div class="concept-info">
                 <div class="concept-name">s04: Subagent 子代理</div>
-                <div class="concept-desc">Context isolation + 防止递归派发</div>
+                <div class="concept-desc">Context isolation + 只返回摘要</div>
             </div>
             <div class="score">90%</div>
         </div>
@@ -108,45 +108,55 @@
         </div>
     </div>
 
-    <div class="section-title">高级协作 (s09-s11) 进行中</div>
+    <div class="section-title">高级协作 (s09-s11) ✓ 完成</div>
+    <div class="concepts">
+        <div class="concept mastered">
+            <div class="status mastered">✓</div>
+            <div class="concept-info">
+                <div class="concept-name">s09: Agent Teams</div>
+                <div class="concept-desc">Teammate vs Subagent + JSONL inbox + drain 机制</div>
+            </div>
+            <div class="score">85%</div>
+        </div>
+        <div class="concept mastered">
+            <div class="status mastered">✓</div>
+            <div class="concept-info">
+                <div class="concept-name">s10: Shutdown + Plan 协议</div>
+                <div class="concept-desc">request_id 关联 + 协商式关闭 + 计划审批</div>
+            </div>
+            <div class="score">85%</div>
+        </div>
+        <div class="concept mastered">
+            <div class="status mastered">✓</div>
+            <div class="concept-info">
+                <div class="concept-name">s11: Autonomous agents</div>
+                <div class="concept-desc">自动认领任务 + idle 轮询 + Identity Re-injection</div>
+            </div>
+            <div class="score">90%</div>
+        </div>
+    </div>
+
+    <div class="section-title">隔离与整合</div>
     <div class="concepts">
         <div class="concept in-progress">
             <div class="status in-progress">→</div>
             <div class="concept-info">
-                <div class="concept-name">s09: Agent Teams</div>
-                <div class="concept-desc">Teammate vs Subagent + JSONL inbox 消息传递</div>
+                <div class="concept-name">s12: Worktree 隔离</div>
+                <div class="concept-desc">Git worktree 目录级隔离 + Task 绑定</div>
             </div>
-            <div class="score blue">40%</div>
+            <div class="score blue">0%</div>
         </div>
-        <div class="concept not-started">
-            <div class="status not-started">○</div>
-            <div class="concept-info">
-                <div class="concept-name">s10: Shutdown + Plan 协议</div>
-                <div class="concept-desc">优雅关闭 + 计划审批</div>
-            </div>
-        </div>
-        <div class="concept not-started">
-            <div class="status not-started">○</div>
-            <div class="concept-info">
-                <div class="concept-name">s11: Autonomous agents</div>
-                <div class="concept-desc">自动认领任务 + idle 轮询</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section-title">毕业设计</div>
-    <div class="concepts">
         <div class="concept not-started">
             <div class="status not-started">○</div>
             <div class="concept-info">
                 <div class="concept-name">s_full: 完整实现</div>
-                <div class="concept-desc">整合 s01-s11 的完整 Agent (741 行)</div>
+                <div class="concept-desc">整合 s01-s12 的完整 Agent</div>
             </div>
         </div>
     </div>
 
     <div class="footer">
-        进度: 13/17 概念 (76%) | 上次学习: 2026-04-08
+        进度: 16/18 概念 (89%) | 上次学习: 2026-04-08
     </div>
 </body>
 </html>

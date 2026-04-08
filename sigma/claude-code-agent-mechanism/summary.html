@@ -39,7 +39,7 @@
     .progress-fill {
       background: linear-gradient(90deg, #00d9ff, #00ff88);
       height: 100%;
-      width: 76%;
+      width: 89%;
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -115,7 +115,7 @@
 
     <h2>📈 学习进度</h2>
     <div class="progress-bar">
-      <div class="progress-fill">13/17 概念掌握 (76%)</div>
+      <div class="progress-fill">16/18 概念掌握 (89%)</div>
     </div>
 
     <p class="section-label">基础核心 (s01-s04) ✓</p>
@@ -170,19 +170,27 @@
       </div>
     </div>
 
-    <p class="section-label">高级协作 (s09-s11)</p>
+    <p class="section-label">高级协作 (s09-s11) ✓</p>
+    <div class="concept-grid">
+      <div class="concept-card">
+        <h3>s09: Agent Teams</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>s10: Shutdown + Plan</h3>
+        <div class="score">85%</div>
+      </div>
+      <div class="concept-card">
+        <h3>s11: Autonomous</h3>
+        <div class="score">90%</div>
+      </div>
+    </div>
+
+    <p class="section-label">隔离与整合</p>
     <div class="concept-grid">
       <div class="concept-card in-progress">
-        <h3>s09: Agent Teams</h3>
-        <div class="score blue">40%</div>
-      </div>
-      <div class="concept-card pending">
-        <h3>s10: Shutdown + Plan</h3>
-        <div class="score">待学习</div>
-      </div>
-      <div class="concept-card pending">
-        <h3>s11: Autonomous</h3>
-        <div class="score">待学习</div>
+        <h3>s12: Worktree 隔离</h3>
+        <div class="score blue">待学习</div>
       </div>
       <div class="concept-card pending">
         <h3>s_full: 完整实现</h3>
@@ -199,11 +207,13 @@
       <li><strong>文件任务</strong>: 持久化到磁盘，context compression 后仍可恢复；blockedBy 依赖图保证执行顺序</li>
       <li><strong>后台任务</strong>: threading 并行执行 + notification queue 推送完成通知</li>
       <li><strong>Teammate vs Subagent</strong>: 持久存在 + 双向通信 vs 执行完就销毁 + 单向返回</li>
+      <li><strong>Team Protocols</strong>: request_id 关联模式 + 协商式关闭（Teammate 可拒绝）+ Plan 审批</li>
+      <li><strong>Autonomous</strong>: idle 轮询 5s + 主动认领任务 + Identity Re-injection（压缩后恢复身份）</li>
     </ul>
 
     <div class="next-steps">
       <h3>🚀 下次继续</h3>
-      <p><strong>s09: Agent Teams</strong> - JSONL inbox 的 drain 机制问题</p>
+      <p><strong>s12: Worktree 隔离</strong> - Git worktree 目录级隔离 + Task 绑定</p>
       <p style="margin-top: 10px; color: #888;">恢复学习时运行: <code>/sigma --resume</code></p>
     </div>
 
